@@ -1,16 +1,29 @@
 #!/usr/bin/env bash
 
+set -x  # Print each command as it runs for debugging
+
 # directory for CMake output
 BUILD=build
 
 # directory for application output
 mkdir -p out
 
+# Show what's in the current directory and src before building
+ls -l
+echo "--- src directory ---"
+ls -l src || echo "src directory missing"
+echo "--- CMakeLists.txt ---"
+ls -l CMakeLists.txt || echo "CMakeLists.txt missing"
+
+echo "--- /tmp/meeting-sdk-linux-sample ---"
+ls -l /tmp/meeting-sdk-linux-sample || echo "/tmp/meeting-sdk-linux-sample missing"
+
 setup-pulseaudio() {
   # Enable dbus
   if [[  ! -d /var/run/dbus ]]; then
     mkdir -p /var/run/dbus
     dbus-uuidgen > /var/lib/dbus/machine-id
+
     dbus-daemon --config-file=/usr/share/dbus-1/system.conf --print-address
   fi
 
@@ -33,9 +46,9 @@ setup-pulseaudio() {
 }
 
 build() {
-  # Configure CMake if this is the first run
-  [[ ! -d "$BUILD" ]] && {
-    cmake -B "$BUILD" -S . --preset debug || exit;
+  # Only run CMake if the Makefile does not exist
+  [[ ! -f "$BUILD/Makefile" ]] && {
+    cmake -B "$BUILD" -S . || { echo "CMake configuration failed"; exit 1; }
     npm --prefix=client install
   }
 
@@ -47,7 +60,7 @@ build() {
   setup-pulseaudio &> /dev/null || exit;
 
   # Build the Source Code
-  cmake --build "$BUILD"
+  cmake --build "$BUILD" || { echo "CMake build failed"; exit 1; }
 }
 
 run() {

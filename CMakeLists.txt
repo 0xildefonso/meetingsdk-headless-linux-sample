@@ -54,9 +54,8 @@ add_executable(zoomsdk src/main.cpp
 )
 
 
-target_include_directories(zoomsdk PRIVATE ${JWT_CPP_INCLUDE_DIRS})
-target_link_libraries(zoomsdk PRIVATE meetingsdk ada::ada CLI11::CLI11 PkgConfig::deps ${OpenCV_LIBS} ${X11_LIBRARIES})
-
+find_package(OpenSSL REQUIRED)
+target_link_libraries(zoomsdk PRIVATE meetingsdk ada::ada CLI11::CLI11 PkgConfig::deps ${OpenCV_LIBS} ${X11_LIBRARIES} OpenSSL::Crypto)
 
 
 

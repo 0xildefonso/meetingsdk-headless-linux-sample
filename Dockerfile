@@ -10,8 +10,8 @@ WORKDIR $cwd
 ARG DEBIAN_FRONTEND=noninteractive
 
 #  Install Dependencies
-RUN apt-get update  \
-    && apt-get install -y \
+# 1. Core build tools and system utilities
+RUN apt-get update && apt-get install -y \
     build-essential \
     ca-certificates \
     cmake \
@@ -19,13 +19,18 @@ RUN apt-get update  \
     gdb \
     git \
     gfortran \
-    libopencv-dev \
+    pkgconf \
+    tar \
+    unzip \
+    zip
+
+# 2. Graphics and X11 libraries
+RUN apt-get install -y \
     libdbus-1-3 \
     libgbm1 \
     libgl1-mesa-glx \
     libglib2.0-0 \
     libglib2.0-dev \
-    libssl-dev \
     libx11-dev \
     libx11-xcb1 \
     libxcb-image0 \
@@ -37,11 +42,18 @@ RUN apt-get update  \
     libxcb-xtest0 \
     libgl1-mesa-dri \
     libxfixes3 \
-    linux-libc-dev \
-    pkgconf \
-    tar \
-    unzip \
-    zip
+    linux-libc-dev
+
+# 3. Project-specific libraries
+RUN apt-get install -y \
+    libopencv-dev \
+    libssl-dev
+
+# 4. GCC-12 and alternatives
+RUN apt-get install -y gcc-12 g++-12 && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100 --slave /usr/bin/g++ g++ /usr/bin/g++-12
+ENV CC=gcc
+ENV CXX=g++
 
 # Install ALSA
 RUN apt-get install -y libasound2 libasound2-plugins alsa alsa-utils alsa-oss

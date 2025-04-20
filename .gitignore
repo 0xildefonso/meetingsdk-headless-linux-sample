@@ -133,3 +133,5 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
+diagnostic.zip
+config.*toml
