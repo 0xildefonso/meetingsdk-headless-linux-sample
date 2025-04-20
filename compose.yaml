@@ -11,4 +11,4 @@ services:
       - .:/tmp/meeting-sdk-linux-sample
     ports:
       - "3000:3000"
-    entrypoint: ["/bin/bash", "-c", "modprobe snd-dummy && modprobe v4l2loopback video_nr=0,1 card_label='BotCam1,BotCam2' exclusive_caps=1 && exec /tini -- ./bin/entry.sh"]
+    entrypoint: ["/tini", "--", "./bin/entry.sh"]
