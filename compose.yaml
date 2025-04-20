@@ -2,7 +2,13 @@ services:
   zoomsdk: &zoomsdk
     build: ./
     platform: linux/amd64
+    privileged: true  # Required for loading kernel modules
+    devices:
+      - /dev/snd  # Dummy audio
+      - /dev/video0  # Dummy video (first loopback device)
+      - /dev/video1  # Dummy video (second loopback device, optional)
     volumes:
-     - .:/tmp/meeting-sdk-linux-sample
+      - .:/tmp/meeting-sdk-linux-sample
     ports:
       - "3000:3000"
+    entrypoint: ["/bin/bash", "-c", "modprobe snd-dummy && modprobe v4l2loopback video_nr=0,1 card_label='BotCam1,BotCam2' exclusive_caps=1 && exec /tini -- ./bin/entry.sh"]

@@ -59,7 +59,14 @@ ENV CXX=g++
 RUN apt-get install -y libasound2 libasound2-plugins alsa alsa-utils alsa-oss
 
 # Install Pulseaudio
-RUN apt-get install -y  pulseaudio pulseaudio-utils
+RUN apt-get install -y pulseaudio pulseaudio-utils
+
+# --- Dummy audio/video support ---
+# Install kernel modules and utilities for dummy audio and v4l2loopback video
+RUN apt-get install -y kmod v4l2loopback-dkms v4l2loopback-utils
+
+# Note: Loading kernel modules (snd-dummy, v4l2loopback) must be done on the HOST, not inside the container.
+# See README/compose.yaml for runtime options.
 
 FROM base AS deps
 
