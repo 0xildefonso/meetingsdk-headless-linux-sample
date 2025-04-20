@@ -89,6 +89,12 @@ RUN git clone --branch main https://github.com/ada-url/ada.git /opt/ada \
     && cmake -Bbuild -DCMAKE_BUILD_TYPE=Release \
     && cmake --build build --target install
 
+# Clone and build CLI11 from source
+RUN git clone --branch v2.4.2 https://github.com/CLIUtils/CLI11.git /opt/CLI11 \
+    && cd /opt/CLI11 \
+    && cmake -Bbuild -DCMAKE_BUILD_TYPE=Release \
+    && cmake --build build --target install
+
 FROM deps AS build
 
 WORKDIR $cwd
