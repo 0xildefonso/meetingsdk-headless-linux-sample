@@ -10,6 +10,7 @@ set(CMAKE_SYSTEM_PROCESSOR x86_64)
 
 set(ZOOM_SDK lib/zoomsdk)
 
+list(APPEND CMAKE_PREFIX_PATH "/usr/local")
 find_package(ada REQUIRED)
 find_package(CLI11 REQUIRED)
 find_path(JWT_CPP_INCLUDE_DIRS "jwt-cpp/base.h")

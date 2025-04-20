@@ -78,8 +78,16 @@ WORKDIR /opt
 RUN git clone --depth 1 https://github.com/Microsoft/vcpkg.git \
     && ./vcpkg/bootstrap-vcpkg.sh -disableMetrics \
     && ln -s /opt/vcpkg/vcpkg /usr/local/bin/vcpkg \
-    && vcpkg install vcpkg-cmake \
-    && vcpkg install ada
+    && vcpkg install vcpkg-cmake
+
+# Install dependencies for ada
+RUN apt-get update && apt-get install -y git cmake
+
+# Clone and build ada from source
+RUN git clone --branch main https://github.com/ada-url/ada.git /opt/ada \
+    && cd /opt/ada \
+    && cmake -Bbuild -DCMAKE_BUILD_TYPE=Release \
+    && cmake --build build --target install
 
 FROM deps AS build
 
