@@ -2,11 +2,11 @@ services:
   zoomsdk: &zoomsdk
     build: ./
     platform: linux/amd64
-    privileged: true  # Required for loading kernel modules
+    privileged: true # Required for loading kernel modules
     devices:
-      - /dev/snd  # Dummy audio
-      - /dev/video0  # Dummy video (first loopback device)
-      - /dev/video1  # Dummy video (second loopback device, optional)
+      - /dev/snd:/dev/snd # Dummy audio
+      - /dev/video0 # Dummy video (first loopback device)
+      - /dev/video1 # Dummy video (second loopback device, optional)
     volumes:
       - .:/tmp/meeting-sdk-linux-sample
     ports:
