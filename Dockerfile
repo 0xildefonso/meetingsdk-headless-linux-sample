@@ -95,6 +95,14 @@ RUN git clone --branch v2.4.2 https://github.com/CLIUtils/CLI11.git /opt/CLI11 \
     && cmake -Bbuild -DCMAKE_BUILD_TYPE=Release \
     && cmake --build build --target install
 
+# Install dependencies for npm
+RUN apt-get update && apt-get install -y npm
+
+# Install jwt-cpp (header-only)
+RUN git clone --branch v0.6.0 https://github.com/Thalhammer/jwt-cpp.git /opt/jwt-cpp \
+    && mkdir -p /usr/local/include/jwt-cpp \
+    && cp -r /opt/jwt-cpp/include/jwt-cpp/* /usr/local/include/jwt-cpp/
+
 FROM deps AS build
 
 WORKDIR $cwd
