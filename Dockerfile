@@ -103,6 +103,11 @@ RUN git clone --branch v0.6.0 https://github.com/Thalhammer/jwt-cpp.git /opt/jwt
     && mkdir -p /usr/local/include/jwt-cpp \
     && cp -r /opt/jwt-cpp/include/jwt-cpp/* /usr/local/include/jwt-cpp/
 
+# Install picojson (header-only, for jwt-cpp)
+RUN git clone --depth 1 https://github.com/kazuho/picojson.git /opt/picojson \
+    && mkdir -p /usr/local/include/picojson \
+    && cp /opt/picojson/picojson.h /usr/local/include/picojson/picojson.h
+
 FROM deps AS build
 
 WORKDIR $cwd
