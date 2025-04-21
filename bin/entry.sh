@@ -57,7 +57,13 @@ build() {
   [[ ! -f "${LIB}.1" ]] && cp "$LIB"{,.1}
 
   # Set up and start pulseaudio
-  setup-pulseaudio &> /dev/null || exit;
+  setup-pulseaudio || exit
+
+# Set PulseAudio server for all processes
+export PULSE_SERVER=localhost
+
+# Show PulseAudio info for debugging
+pactl info || echo "pactl info failed"
 
   # Build the Source Code
   cmake --build "$BUILD" || { echo "CMake build failed"; exit 1; }
